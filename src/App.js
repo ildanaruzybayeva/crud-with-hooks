@@ -17,13 +17,37 @@ const App = () => {
   }, []);
 
   const addUser = user => {
-    user.id = users.length + 1;
-    setUsers([...users, user]);
+    console.log(user);
+    fetch(BACKEND_ROOT, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      mode: "cors",
+      body: JSON.stringify(user)
+    })
+      .then(response => response.json())
+      .then(() => {
+        setUsers([...users, user]);
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
   };
 
   const deleteUser = id => {
-    setUsers(users.filter(user => user.id !== id));
-    setEditing(false);
+    fetch(`${BACKEND_ROOT}${id}`, { method: "DELETE", mode: "cors" })
+      .then(() => {
+        setUsers(users.filter(user => user.id !== id));
+        setEditing(false);
+      })
+      .catch(err => {
+        console.log(err.message);
+        console.log(err);
+      });
+
+    // setUsers(users.filter(user => user.id !== id));
+    //
   };
 
   const [editing, setEditing] = useState(false);
