@@ -1,17 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.css";
 import UserTable from "./UserTable";
 import AddUserForm from "./AddUserForm";
 import EditUserForm from "./EditUserForm";
 
-const App = () => {
-  const usersData = [
-    { id: 1, name: "Tania", username: "floppydiskette" },
-    { id: 2, name: "Craig", username: "siliconeidolon" },
-    { id: 3, name: "Ben", username: "benisphere" }
-  ];
+const BACKEND_ROOT = "https://0obxv.sse.codesandbox.io/";
 
-  const [users, setUsers] = useState(usersData);
+const App = () => {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    fetch(BACKEND_ROOT)
+      .then(response => response.json())
+      .then(users => setUsers(users))
+      .catch(err => console.error(err));
+  }, []);
 
   const addUser = user => {
     user.id = users.length + 1;
