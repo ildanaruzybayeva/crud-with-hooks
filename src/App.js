@@ -59,9 +59,44 @@ const App = () => {
     setCurrentUser({ id: user.id, name: user.name, username: user.username });
   };
 
+  // const updateUser = (id, updatedUser) => {
+  //   fetch(BACKEND_ROOT, {
+  //     method: "PUT",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //     mode: "cors",
+  //     body: JSON.stringify(id, updatedUser)
+  //   })
+  //     .then(response => response.json())
+  //     .then(() => {
+  //       setEditing(false);
+  //       setUsers(users.map(user => (user.id === id ? updatedUser : user)));
+  //     })
+  //     .catch(err => {
+  //       console.log(err.message);
+  //     });
+  // };
+
   const updateUser = (id, updatedUser) => {
-    setEditing(false);
-    setUsers(users.map(user => (user.id === id ? updatedUser : user)));
+    console.log(updatedUser);
+    fetch(`${BACKEND_ROOT}${id}`, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      mode: "cors",
+      // body: JSON.stringify(updatedUser)
+      body: JSON.stringify(updatedUser)
+    })
+      .then(response => response.json())
+      .then(() => {
+        setEditing(false);
+        setUsers(users.map(user => (user.id === id ? updatedUser : user)));
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
   };
 
   return (
